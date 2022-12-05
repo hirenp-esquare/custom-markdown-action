@@ -1,4 +1,4 @@
-name: 'Markdown Rules'
+name: 'Custom Markdown Rules'
 description: 'Check Markdown Rules in project files'
 author: "Hiren Patel"
 inputs:
