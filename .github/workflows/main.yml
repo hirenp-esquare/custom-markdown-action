@@ -1,7 +1,7 @@
 on: [push]
 
 jobs:
-  Markdown Rules:
+ custom_markdown_Rules:
     runs-on: ubuntu-latest
     name: Markdown Rules Check String
     steps:
@@ -12,4 +12,4 @@ jobs:
         id: selftest
         uses: hirenp-waferwire/custom-markdown-action@main
         with:
-          GlobPath: '*.md'
+          GlobPath: 'Test/**/*.md'
