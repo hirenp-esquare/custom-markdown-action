@@ -1,0 +1,11 @@
+name: 'Markdown Rules'
+description: 'Check Markdown Rules in project files'
+author: "Hiren Patel"
+inputs:
+  GlobPath:  # id of input
+    description: 'A glob of files to include in our markdown rules'
+    required: true
+    default: '*.md'
+runs:
+  using: 'node16'
+  main: 'index.js'

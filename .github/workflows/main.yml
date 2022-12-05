@@ -1,0 +1,15 @@
+on: [push]
+
+jobs:
+  Markdown Rules:
+    runs-on: ubuntu-latest
+    name: Markdown Rules Check String
+    steps:
+      - uses: actions/checkout@v3
+        with:
+         fetch-depth: "0"
+      - name: Markdown Rules Check String step
+        id: selftest
+        uses: hirenp-waferwire/custom-markdown-action@main
+        with:
+          GlobPath: '*.md'
