@@ -38,7 +38,7 @@ async function readFile(path) {
       //Check for multiple question in sentence
       var totalQuestions = line.match(/\?/g);
       if (totalQuestions && totalQuestions.length > 1) {
-        var error = "Found multiple questions on a bulleted or numbered step error at " + lineno + " lines, " + path
+        var error = "Found multiple questions on a bulleted or numbered step, error at " + lineno + " lines, " + path
         errorMULTIQuestions.push(error)
       }
 
@@ -51,7 +51,7 @@ async function readFile(path) {
 
         //Use sentence case with numbered steps
         if (uppercaseWords.length > 1 && lowercaseWords && lowercaseWords.length > 0) {
-          var error = "Use sentence case with numbered steps error at " + lineno + " lines, " + path
+          var error = "Use sentence case with numbered steps, error at " + lineno + " lines, " + path
           errorMULTICapsWords.push(error)
         }
       }
@@ -63,7 +63,7 @@ async function readFile(path) {
 
       ampersandMatch = ampersandMatch.filter(item => !ampersandIgnore.some(item2 => item2 == item.toLowerCase()));
       if (ampersandMatch.length > 0) {
-        var error = 'Use "and" instead of "&" error at ' + lineno + ' lines, ' + path
+        var error = 'Use "and" instead of "&", error at ' + lineno + ' lines, ' + path
         errorAmpersand.push(error);
       }
     }
@@ -88,10 +88,10 @@ async function readFile(path) {
     var noteMatch = line.match(/^\s*note.{0,2}|^\*\*note.{0,4}/i);
     if (noteMatch != null && noteMatch.length > 0) {
       if (noteMatch[0].indexOf(":") == -1) {
-        var error = '"Note" should be followed by a colon (:) error at ' + lineno + ' lines, ' + path
+        var error = '"Note" should be followed by a colon (:), error at ' + lineno + ' lines, ' + path
         errorNoteConsistently.push(error);
       } else if (noteMatch[0].toLowerCase().indexOf("**note**") == -1) {
-        var error = '"Note:" should be boldface error at ' + lineno + ' lines, ' + path
+        var error = '"Note:" should be boldface, error at ' + lineno + ' lines, ' + path
         errorNoteConsistently.push(error);
       }
     }
