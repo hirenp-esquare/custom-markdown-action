@@ -3,7 +3,7 @@ const github = require('@actions/github');
 const glob = require("glob");
 const fs = require('fs');
 const readline = require('readline');
-var prepositions = require('./Prepositions.json')
+var prepositions;
 var abbreviations;
 
 
@@ -108,27 +108,27 @@ async function readFile(path) {
   if (--totalFiles == 0) {
     for (let i = 0; i < errorMULTIQuestions.length; i++) {
       var error = errorMULTIQuestions[i];
-      //console.log(error)
+      console.log(error)
     }
 
     for (let i = 0; i < errorMULTICapsWords.length; i++) {
       var error = errorMULTICapsWords[i];
-      //console.log(error)
+      console.log(error)
     }
 
     for (let i = 0; i < errorAmpersand.length; i++) {
       var error = errorAmpersand[i];
-      //console.log(error)
+      console.log(error)
     }
 
     for (let i = 0; i < errorPrepositionsCapitalized.length; i++) {
       var error = errorPrepositionsCapitalized[i];
-      //console.log(error)
+      console.log(error)
     }
 
     for (let i = 0; i < errorNoteConsistently.length; i++) {
       var error = errorNoteConsistently[i];
-      //console.log(error)
+      console.log(error)
     }
   }
 }
@@ -139,15 +139,21 @@ try {
   //const globPath = "Test/**/*.md";
   // const globPath = "Test/*.md";
   const globPath = core.getInput('GlobPath');
+  const abbreviationFileName = core.getInput('AbbreviationFileName');
+  const prepositionsFileName = core.getInput('PrepositionsFileName');
 
-  const abbreviation_file = core.getInput('abbreviation_file');
-
-  if (abbreviation_file) {
-    abbreviations = require(`${process.cwd()}/.github/workflows/${abbreviation_file}.json`)
+  if (abbreviationFileName) {
+    abbreviations = require(`${process.cwd()}/.github/workflows/${abbreviationFileName}.json`)
   }else{
     abbreviations = require('./Abbreviation.json');
   }
-  console.log(abbreviations);
+
+  if (prepositionsFileName) {
+    prepositions = require(`${process.cwd()}/.github/workflows/${prepositionsFileName}.json`)
+  }else{
+    prepositions = require('./Prepositions.json');
+  }
+
 
 
   getDirectories(globPath, function (err, res) {

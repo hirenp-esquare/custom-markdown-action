@@ -6,8 +6,11 @@ inputs:
     description: 'A glob of files to include in our markdown rules'
     required: true
     default: '*.md'
-  abbreviation_file:
-    description: 'abbreviation config file'
+  AbbreviationsFileName:
+    description: 'abbreviation file'
+    required: false
+  PrepositionsFileName:
+    description: 'Prepositions file'
     required: false
 runs:
   using: 'node16'
