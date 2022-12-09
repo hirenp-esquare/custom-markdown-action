@@ -145,15 +145,18 @@ try {
   if (abbreviationFileName) {
     abbreviations = require(`${process.cwd()}/.github/workflows/${abbreviationFileName}.json`)
   }else{
-    abbreviations = require('./Abbreviations.json');
+    //abbreviations = require('./Abbreviations.json');
   }
+
+  console.log(abbreviations);
 
   if (prepositionsFileName) {
     prepositions = require(`${process.cwd()}/.github/workflows/${prepositionsFileName}.json`)
   }else{
-    prepositions = require('./Prepositions.json');
+   // prepositions = require('./Prepositions.json');
   }
 
+  console.log(prepositions);
 
 
   getDirectories(globPath, function (err, res) {
