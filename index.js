@@ -145,7 +145,7 @@ try {
   if (abbreviationFileName) {
     abbreviations = require(`${process.cwd()}/.github/workflows/${abbreviationFileName}.json`)
   }else{
-    abbreviations = require('./Abbreviation.json');
+    abbreviations = require('./Abbreviations.json');
   }
 
   if (prepositionsFileName) {
