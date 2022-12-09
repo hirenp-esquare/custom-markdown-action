@@ -4,8 +4,7 @@ const glob = require("glob");
 const fs = require('fs');
 const readline = require('readline');
 var prepositions = require('./Prepositions.json')
-var abbreviation = require('./Abbreviation.json')
-
+var abbreviations;
 
 
 var totalFiles = 0;
@@ -42,18 +41,27 @@ async function readFile(path) {
         errorMULTIQuestions.push(error)
       }
 
-      var uppercaseWords = line.match(/(\b[A-Z][A-Z]+'S|\b[A-Z][-_A-Z]+|\b [A-Z] \b)/g);//line.match(/(\b[A-Z][-'_A-Z]+|\b[A-Z]\b)/g);
-      var lowercaseWords = line.match(/(\b[a-z][a-z]+'s|\b[A-Z][-_a-z]+|\b [a-z] \b)/g); //line.match(/(\b[a-z][-'_a-z]+|\b[a-z]\b)/g);
+      //Remove abbreviation and phrase
+      var abbreviationLineReplace;
+      for (let i = 0; i < abbreviations.length; i++) {
+        var abbreviation = abbreviations[i];
 
-      //Remove abbreviation
-      if (uppercaseWords && uppercaseWords.length > 0) {
-        uppercaseWords = uppercaseWords.filter(item => !abbreviation.some(item2 => item2 == item));
-
-        //Use sentence case with numbered steps
-        if (uppercaseWords.length > 1 && lowercaseWords && lowercaseWords.length > 0) {
-          var error = "Use sentence case with numbered steps, error on line "+lineno+", " + path
-          errorMULTICapsWords.push(error)
+        var abbreviationRegExp = new RegExp(abbreviation, 'gi');
+        if (i > 0) {
+          abbreviationLineReplace = abbreviationLineReplace.replace(abbreviationRegExp,"");
+        }else{
+          abbreviationLineReplace = line.replace(abbreviationRegExp,"");
         }
+
+        abbreviationLineReplace = abbreviationLineReplace.replace(/  /g,' ')
+      }
+
+      //Use sentence case with numbered steps
+      var uppercaseWords = abbreviationLineReplace.match(/(\b[A-Z][A-Z]+'S|\b[A-Z][-_A-Z]+|\b [A-Z] \b)/g);//line.match(/(\b[A-Z][-'_A-Z]+|\b[A-Z]\b)/g);
+      var lowercaseWords = abbreviationLineReplace.match(/(\b[a-z][a-z]+'s|\b[A-Z][-_a-z]+|\b [a-z] \b)/g); //line.match(/(\b[a-z][-'_a-z]+|\b[a-z]\b)/g);
+      if (uppercaseWords && uppercaseWords.length > 1 && lowercaseWords && lowercaseWords.length > 0) {
+        var error = "Use sentence case with numbered steps, error on line "+lineno+", " + path
+        errorMULTICapsWords.push(error)
       }
     }
 
@@ -100,35 +108,47 @@ async function readFile(path) {
   if (--totalFiles == 0) {
     for (let i = 0; i < errorMULTIQuestions.length; i++) {
       var error = errorMULTIQuestions[i];
-      console.log(error)
+      //console.log(error)
     }
 
     for (let i = 0; i < errorMULTICapsWords.length; i++) {
       var error = errorMULTICapsWords[i];
-      console.log(error)
+      //console.log(error)
     }
 
     for (let i = 0; i < errorAmpersand.length; i++) {
       var error = errorAmpersand[i];
-      console.log(error)
+      //console.log(error)
     }
 
     for (let i = 0; i < errorPrepositionsCapitalized.length; i++) {
       var error = errorPrepositionsCapitalized[i];
-      console.log(error)
+      //console.log(error)
     }
 
     for (let i = 0; i < errorNoteConsistently.length; i++) {
       var error = errorNoteConsistently[i];
-      console.log(error)
+      //console.log(error)
     }
   }
 }
 
 try {
+
+
   //const globPath = "Test/**/*.md";
-  //const globPath = "Test/*.md";
+  // const globPath = "Test/*.md";
   const globPath = core.getInput('GlobPath');
+
+  const abbreviation_file = core.getInput('abbreviation_file');
+
+  if (abbreviation_file) {
+    abbreviations = require(`./${abbreviation_file}.json`)
+  }else{
+    abbreviations = require('./Abbreviation.json');
+  }
+  console.log(abbreviations);
+
 
   getDirectories(globPath, function (err, res) {
     if (err) {
@@ -144,10 +164,6 @@ try {
             readFile(path);
           }
         }
-
-        //console.log("modifiedFiles:- " + modifiedCount)
-      } else {
-        //console.log("modifiedFiles:- " + modifiedCount)
       }
     }
   });

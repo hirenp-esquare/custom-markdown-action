@@ -1,3 +1,4 @@
+1. I am James Rollins and I am Owner of Praxis VA Test
 # _Modeling to Learn_ Blue
 
 [<img src = "https://github.com/lzim/teampsd/blob/master/resources/logos/mtl_how_blue.png"
@@ -16,6 +17,7 @@
 5. [mtl.how/team](https://www.mtl.how/team) - Team Participatory System Dynamics - The _MTL_ Research & Development Team
 6. [mtl.how/tms](https://www.mtl.how/tms) - VA TMS 3.0 Learning System for & Accreditation
 7. [mtl.how/refs](https://www.mtl.how/refs) - _MTL_ References
+7. I am James Rollins and I am Owner of Praxis VA Test
 
 
 ### part 1. *Modeling to Learn* from our **patient data** and **team trends.**
