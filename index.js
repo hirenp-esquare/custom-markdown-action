@@ -6,7 +6,6 @@ const readline = require('readline');
 var prepositions;
 var abbreviations;
 
-
 var totalFiles = 0;
 var ampersandIgnore = ["tips & tricks"];
 var errorMULTIQuestions = [];
@@ -28,8 +27,7 @@ async function readFile(path) {
 
   const line_counter = ((i = 0) => () => ++i)();
   for await (const line of rl) {
-    lineno = line_counter()
-
+    lineno = line_counter();
 
     //Rule: Use sentence case with numbered or bulleted instruction steps. Only one question per number or bullet.
     if (/^\s*\d[.]/.test(line) || /^\s*-/.test(line)) {
@@ -37,30 +35,30 @@ async function readFile(path) {
       //Check for multiple question in sentence
       var totalQuestions = line.match(/\?/g);
       if (totalQuestions && totalQuestions.length > 1) {
-        var error = "Found multiple questions on a bulleted or numbered step, error on line "+lineno+", " + path
+        var error = "Found multiple questions on a bulleted or numbered step, error on line " + lineno + ", " + path
         errorMULTIQuestions.push(error)
       }
 
       //Remove abbreviation and phrase
       var abbreviationLineReplace;
       for (let i = 0; i < abbreviations.length; i++) {
-        var abbreviation = abbreviations[i];
 
+        var abbreviation = abbreviations[i];
         var abbreviationRegExp = new RegExp(abbreviation, 'gi');
         if (i > 0) {
-          abbreviationLineReplace = abbreviationLineReplace.replace(abbreviationRegExp,"");
-        }else{
-          abbreviationLineReplace = line.replace(abbreviationRegExp,"");
+          abbreviationLineReplace = abbreviationLineReplace.replace(abbreviationRegExp, "");
+        } else {
+          abbreviationLineReplace = line.replace(abbreviationRegExp, "");
         }
+        abbreviationLineReplace = abbreviationLineReplace.replace(/  /g, ' ');
 
-        abbreviationLineReplace = abbreviationLineReplace.replace(/  /g,' ')
       }
 
       //Use sentence case with numbered steps
       var uppercaseWords = abbreviationLineReplace.match(/(\b[A-Z][A-Z]+'S|\b[A-Z][-_A-Z]+|\b [A-Z] \b)/g);//line.match(/(\b[A-Z][-'_A-Z]+|\b[A-Z]\b)/g);
       var lowercaseWords = abbreviationLineReplace.match(/(\b[a-z][a-z]+'s|\b[A-Z][-_a-z]+|\b [a-z] \b)/g); //line.match(/(\b[a-z][-'_a-z]+|\b[a-z]\b)/g);
       if (uppercaseWords && uppercaseWords.length > 1 && lowercaseWords && lowercaseWords.length > 0) {
-        var error = "Use sentence case with numbered steps, error on line "+lineno+", " + path
+        var error = "Use sentence case with numbered steps, error on line " + lineno + ", " + path
         errorMULTICapsWords.push(error)
       }
     }
@@ -71,7 +69,7 @@ async function readFile(path) {
 
       ampersandMatch = ampersandMatch.filter(item => !ampersandIgnore.some(item2 => item2 == item.toLowerCase()));
       if (ampersandMatch.length > 0) {
-        var error = 'Use "and" instead of "&", error on line '+lineno+', ' + path
+        var error = 'Use "and" instead of "&", error on line ' + lineno + ', ' + path
         errorAmpersand.push(error);
       }
     }
@@ -84,7 +82,7 @@ async function readFile(path) {
         var prepositionRegExpMatch = line.match(prepositionRegExp)
         if (prepositionRegExpMatch != null && prepositionRegExpMatch.length > 0) {
           if (/[A-Z]/.test(prepositionRegExpMatch)) {
-            var error = "Prepositions not capitalized in headers, error on line "+lineno+", " + path
+            var error = "Prepositions not capitalized in headers, error on line " + lineno + ", " + path
             errorPrepositionsCapitalized.push(error)
             break;
           }
@@ -96,10 +94,10 @@ async function readFile(path) {
     var noteMatch = line.match(/^\s*note.{0,2}|^\*\*note.{0,4}/i);
     if (noteMatch != null && noteMatch.length > 0) {
       if (noteMatch[0].indexOf(":") == -1) {
-        var error = '"Note" should be followed by a colon (:), error on line '+lineno+', ' + path
+        var error = '"Note" should be followed by a colon (:), error on line ' + lineno + ', ' + path
         errorNoteConsistently.push(error);
       } else if (noteMatch[0].toLowerCase().indexOf("**note**") == -1) {
-        var error = '"Note:" should be boldface, error on line '+lineno+', ' + path
+        var error = '"Note:" should be boldface, error on line ' + lineno + ', ' + path
         errorNoteConsistently.push(error);
       }
     }
@@ -135,7 +133,6 @@ async function readFile(path) {
 
 try {
 
-
   //const globPath = "Test/**/*.md";
   // const globPath = "Test/*.md";
   const globPath = core.getInput('GlobPath');
@@ -144,20 +141,15 @@ try {
 
   if (abbreviationFileName) {
     abbreviations = require(`${process.cwd()}/.github/workflows/${abbreviationFileName}.json`)
-  }else{
-    //abbreviations = require('./Abbreviations.json');
+  } else {
+    abbreviations = require('./Abbreviations.json');
   }
-
-  console.log(abbreviations);
 
   if (prepositionsFileName) {
     prepositions = require(`${process.cwd()}/.github/workflows/${prepositionsFileName}.json`)
-  }else{
-   // prepositions = require('./Prepositions.json');
+  } else {
+    prepositions = require('./Prepositions.json');
   }
-
-  console.log(prepositions);
-
 
   getDirectories(globPath, function (err, res) {
     if (err) {
