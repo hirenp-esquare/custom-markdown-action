@@ -143,7 +143,7 @@ try {
   const abbreviation_file = core.getInput('abbreviation_file');
 
   if (abbreviation_file) {
-    abbreviations = require(`${process.cwd()}${abbreviation_file}.json`)
+    abbreviations = require(`${process.cwd()}/${abbreviation_file}.json`)
   }else{
     abbreviations = require('./Abbreviation.json');
   }
